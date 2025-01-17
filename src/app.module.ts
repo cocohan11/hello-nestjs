@@ -1,11 +1,8 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { MovieModule } from './movie/movie.module';
 
+// 모듈들이 한 데 모이는 중앙모듈 역할을 하게 됨
 @Module({
   imports: [MovieModule],
-  controllers: [AppController],
-  providers: [AppService], // AppService라는 클래스의 인스턴스를 주입하겠다-고 프로바이더에 설정함
 })
 export class AppModule {}
