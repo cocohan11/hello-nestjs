@@ -1,13 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
+import { Moive } from './entity/movie.entity';
 
-
-export interface Moive {
-  id: number;
-  title: string;
-  genre: string;
-}
 
 
 // "IcO컨테이너야. 너가 MovieService클래스(인스턴스)를 싱글톤으로 컨테이너에서 관리해줘" 
@@ -29,6 +24,14 @@ export class MovieService {
     }
   ];
   private idCounter = 3;
+
+
+  // 생성자
+  constructor() {
+    const movie1 = {
+      
+    }
+  }
 
 
   getManyMovies(title: string) {
@@ -66,6 +69,7 @@ export class MovieService {
     }
 
     Object.assign(movie, updateMovieDto); // 덮어쓰겠다
+    return movie;
   }
 
 
