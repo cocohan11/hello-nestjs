@@ -11,30 +11,29 @@ import { Moive } from './entity/movie.entity';
 export class MovieService {
 
   // 임시 DB
-  private movies: Moive[] =  [
-    {
-      id: 1,
-      title: '해리포터',
-      genre: 'fantasy'
-    },
-    {
-      id: 2,
-      title: '반지의 제왕왕',
-      genre: 'action'
-    }
-  ];
+  private movies: Moive[] = [];
   private idCounter = 3;
 
 
   // 생성자
-  constructor() {
-    const movie1 = {
-      
-    }
+  constructor() { // 임시DB로 일반객체대신에 인스턴스를 만들어 사용하는것이 안정성에 좋음
+    const movie1 = new Moive();
+    movie1.id = 1;
+    movie1.title = '해리포터';
+    movie1.genre = 'fantasy';
+
+    const movie2 = new Moive();
+    movie2.id = 2;
+    movie2.title = '반지의 제왕';
+    movie2.genre = 'action';
+
+    this.movies.push(movie1, movie2);
   }
 
 
   getManyMovies(title: string) {
+    console.log(this.movies);
+
     if (!title) {
       return this.movies;
     }
@@ -55,6 +54,7 @@ export class MovieService {
     const movie: Moive = {
       id: this.idCounter++,
       ...createMovieDto,
+      description: 'test'
     }
     this.movies.push(movie);
 
