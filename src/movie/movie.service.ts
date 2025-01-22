@@ -54,7 +54,6 @@ export class MovieService {
     const movie: Moive = {
       id: this.idCounter++,
       ...createMovieDto,
-      description: 'test'
     }
     this.movies.push(movie);
 
