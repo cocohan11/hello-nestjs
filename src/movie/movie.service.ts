@@ -3,7 +3,7 @@ import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { Movie } from './entity/movie.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 
 
 // "IcO컨테이너야. 너가 MovieService클래스(인스턴스)를 싱글톤으로 컨테이너에서 관리해줘" 
@@ -18,9 +18,17 @@ export class MovieService {
   ) {}
 
 
-  getManyMovies(title: string) {
+  async getManyMovies(title: string) {
     /// 나중에 title 필터 기능 추가하기
-    return this.movieRepository.find();
+    if (!title) {
+        return [await this.movieRepository.find(), await this.movieRepository.count()]; // 데이터베이스 작업은 비동기이므로, 항상 async/await를 사용해야 함
+    }
+
+    return this.movieRepository.findAndCount({
+      where:{
+        title: Like(`%${title}%`)
+      }
+    })
     // if (!title) {
     //   return this.movies;
     // }
