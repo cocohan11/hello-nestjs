@@ -2,12 +2,13 @@ import { Module } from '@nestjs/common';
 import { MovieService } from './movie.service';
 import { MovieController } from './movie.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Movie } from './entity/movie.entity';
+import { Movie, Series } from './entity/movie.entity';
 
 @Module({
   imports:[
     TypeOrmModule.forFeature([ // 1. 창구직원 채용 (Repository 등록)
       Movie, // Movie 담당 창구직원 채용
+      Series,
     ])
   ],
   controllers: [MovieController],

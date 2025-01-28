@@ -36,6 +36,16 @@ export class MovieController {
   }
 
 
+  @Post('series')
+  postSeries(
+    @Body() body: CreateMovieDto
+  ) {
+    return this.movieService.createSeries(
+      body
+    );
+  }
+
+
   @Patch(':id')
   patchMovie(
     @Param('id') id: string,

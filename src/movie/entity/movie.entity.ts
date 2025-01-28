@@ -1,18 +1,8 @@
 import { Exclude, Expose, Transform } from "class-transformer";
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn, VersionColumn } from "typeorm";
+import { ChildEntity, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, TableInheritance, UpdateDateColumn, VersionColumn } from "typeorm";
 
 
-@Entity() // “이 클래스는 데이터베이스 테이블이야!”
-export class Movie {
-    @PrimaryGeneratedColumn() //오토인크리먼트
-    id: number;
-
-    @Column()
-    title: string;
-    
-    @Column()
-    genre: string;
-
+export class BaseEntity {
     @CreateDateColumn()
     createdAt: Date;
 
@@ -21,7 +11,37 @@ export class Movie {
 
     @VersionColumn()
     version: number; 
+}
 
-    age: number;
 
+@Entity()  
+@TableInheritance({
+    column: {
+        type: 'varchar',
+        name: 'type' // type컬럼으로 자식클래스를 분류하겠다. 
+    }
+})
+export class Content extends BaseEntity {
+    @PrimaryGeneratedColumn() //오토인크리먼트
+    id: number;
+
+    @Column()
+    title: string;
+    
+    @Column() 
+    genre: string;
+}
+
+
+@ChildEntity()
+export class Movie extends Content {
+    @Column()
+    runtime: number;
+}
+
+
+@ChildEntity()
+export class Series extends Content {
+    @Column()
+    seriesCount: number;
 }
