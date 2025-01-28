@@ -14,15 +14,9 @@ export class BaseEntity {
 }
 
 
-@Entity()  
-@TableInheritance({
-    column: {
-        type: 'varchar',
-        name: 'type' // type컬럼으로 자식클래스를 분류하겠다. 
-    }
-})
-export class Content extends BaseEntity {
-    @PrimaryGeneratedColumn() //오토인크리먼트
+@Entity()
+export class Movie extends BaseEntity {
+    @PrimaryGeneratedColumn() 
     id: number;
 
     @Column()
@@ -30,18 +24,4 @@ export class Content extends BaseEntity {
     
     @Column() 
     genre: string;
-}
-
-
-@ChildEntity()
-export class Movie extends Content {
-    @Column()
-    runtime: number;
-}
-
-
-@ChildEntity()
-export class Series extends Content {
-    @Column()
-    seriesCount: number;
 }

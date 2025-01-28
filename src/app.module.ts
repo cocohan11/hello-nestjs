@@ -3,7 +3,7 @@ import { MovieModule } from './movie/movie.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as Joi from 'joi';
-import { Content, Movie, Series } from './movie/entity/movie.entity';
+import { Movie } from './movie/entity/movie.entity';
 
 
 // 모듈들이 한 데 모이는 중앙모듈 역할을 하게 됨
@@ -32,8 +32,6 @@ import { Content, Movie, Series } from './movie/entity/movie.entity';
         database: configService.get<string>('DB_DATABASE'),
         entities: [
           Movie,
-          Series,
-          Content,
         ],
         synchronize: true,
       }),

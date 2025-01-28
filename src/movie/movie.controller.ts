@@ -36,16 +36,6 @@ export class MovieController {
   }
 
 
-  @Post('series')
-  postSeries(
-    @Body() body: CreateMovieDto
-  ) {
-    return this.movieService.createSeries(
-      body
-    );
-  }
-
-
   @Patch(':id')
   patchMovie(
     @Param('id') id: string,
@@ -62,6 +52,6 @@ export class MovieController {
   deleteMovie(
     @Param('id') id: string
   ) {
-    return this.movieService.deleteMovie(+id);
+    return this.movieService.deleteMovie(+id); 
   }
 }
