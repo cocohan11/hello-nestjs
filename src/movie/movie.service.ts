@@ -4,6 +4,7 @@ import { UpdateMovieDto } from './dto/update-movie.dto';
 import { Movie } from './entity/movie.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
+import { MovieDetail } from './entity/movie-detail.entity';
 
 
 // "IcO컨테이너야. 너가 MovieService클래스(인스턴스)를 싱글톤으로 컨테이너에서 관리해줘" 
@@ -15,6 +16,8 @@ export class MovieService {
   constructor(
     @InjectRepository(Movie) // 2. 은행원이 창구직원에게 업무 지시
     private readonly movieRepository: Repository<Movie>, // 창구직원 배정
+    @InjectRepository(MovieDetail) 
+    private readonly movieDetailRepository: Repository<MovieDetail>, 
   ) {}
 
 
@@ -51,7 +54,15 @@ export class MovieService {
 
 
   async createMovie(createMovieDto: CreateMovieDto) {
-    const movie = await this.movieRepository.save(createMovieDto);
+    const movieDetail = await this.movieDetailRepository.save({
+      detail: createMovieDto.detail,
+    });
+    const movie = await this.movieRepository.save({
+      title: createMovieDto.title,
+      genre: createMovieDto.genre,
+      detail: movieDetail,
+    });
+    
     return movie;
   }
 
