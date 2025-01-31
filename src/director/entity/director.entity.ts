@@ -1,10 +1,10 @@
 import { BaseTable } from "src/common/entity/base.entity";
 import { Movie } from "src/movie/entity/movie.entity";
-import { Column, Entity, OneToMany, PrimaryColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Director extends BaseTable {
-    @PrimaryColumn()
+    @PrimaryGeneratedColumn()
     id: number;
 
     @Column()

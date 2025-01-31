@@ -14,7 +14,7 @@ export class MovieController {
   getMovies(
     @Query('title') title?: string
   ) {
-    return this.movieService.getManyMovies(title);
+    return this.movieService.findAll(title);
   }
 
 
@@ -22,7 +22,7 @@ export class MovieController {
   getMovie(
     @Param('id') id: string
   ) {
-    return this.movieService.getMovieById(+id);
+    return this.movieService.findOne(+id);
   }
 
 
@@ -30,7 +30,7 @@ export class MovieController {
   postMovie(
     @Body() body: CreateMovieDto
   ) {
-    return this.movieService.createMovie(
+    return this.movieService.create(
       body
     );
   }
@@ -41,7 +41,7 @@ export class MovieController {
     @Param('id') id: string,
     @Body() body: UpdateMovieDto
   ) {
-    return this.movieService.updateMovie(
+    return this.movieService.update(
       +id, 
       body
     );
@@ -52,6 +52,6 @@ export class MovieController {
   deleteMovie(
     @Param('id') id: string
   ) {
-    return this.movieService.deleteMovie(+id); 
+    return this.movieService.remove(+id); 
   }
 }

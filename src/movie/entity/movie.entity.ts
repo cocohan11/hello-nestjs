@@ -34,7 +34,7 @@ export class Movie extends BaseTable {
 
     @ManyToOne(
         () => Director,
-        // director => director.id, // (생략가능)
+        director => director.id, // (생략가능)
     )
     director: Director;
 }

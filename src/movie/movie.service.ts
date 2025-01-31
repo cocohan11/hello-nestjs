@@ -21,7 +21,7 @@ export class MovieService {
   ) {}
 
 
-  async getManyMovies(title: string) {
+  async findAll(title: string) {
     /// 나중에 title 필터 기능 추가하기
     if (!title) {
         return [await this.movieRepository.find(), await this.movieRepository.count()]; // 데이터베이스 작업은 비동기이므로, 항상 async/await를 사용해야 함
@@ -39,7 +39,7 @@ export class MovieService {
   }
 
 
-  async getMovieById(id: number) {
+  async findOne(id: number) {
     const movie = await this.movieRepository.findOne({
       where:{
         id,
@@ -54,7 +54,7 @@ export class MovieService {
   }
 
 
-  async createMovie(createMovieDto: CreateMovieDto) {
+  async create(createMovieDto: CreateMovieDto) {
     const movie = await this.movieRepository.save({
       title: createMovieDto.title,
       genre: createMovieDto.genre,
@@ -67,7 +67,7 @@ export class MovieService {
   }
 
 
-  async updateMovie(id: number, updateMovieDto: UpdateMovieDto) {
+  async update(id: number, updateMovieDto: UpdateMovieDto) {
     // movie + movieDetail
     const movie = await this.movieRepository.findOne({
       where:{
@@ -108,7 +108,7 @@ export class MovieService {
   }
 
 
-  async deleteMovie(id: number) {
+  async remove(id: number) {
     const movie = await this.movieRepository.findOne({
       where:{
         id,
