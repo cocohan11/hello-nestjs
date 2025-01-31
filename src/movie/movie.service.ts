@@ -80,7 +80,6 @@ export class MovieService {
     if(!movie) {
       throw new NotFoundException('존재하지않는 ID 값의 영화입니다!');
     }
-
     // movie 테이블 업뎃
     const { detail, ...movieRest } = updateMovieDto;
     await this.movieRepository.update(
@@ -91,14 +90,14 @@ export class MovieService {
     if (detail) {
       await this.movieDetailRepository.update(
         {
-          id: movie.detail.id,
+          id: movie.detail.id, // movieDetail테이블의 id를 넣어야됨 주의
         },
         {
           detail,
         }
       )
     }
-
+    // 업뎃한 영화 조회 
     const newMovie = await this.movieRepository.findOne({
       where:{
         id,
@@ -114,7 +113,8 @@ export class MovieService {
     const movie = await this.movieRepository.findOne({
       where:{
         id,
-      }
+      }, 
+      relations: ['detail']
     })
     
     if(!movie) {
@@ -123,6 +123,7 @@ export class MovieService {
 
     //삭제
     await this.movieRepository.delete(id);
+    await this.movieDetailRepository.delete(movie.detail.id)
     return id;
   }
 }
