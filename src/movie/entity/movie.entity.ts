@@ -20,7 +20,13 @@ export class Movie extends BaseTable {
     @Column() 
     genre: string;
 
-    @OneToOne(() => MovieDetail) // MovieDetail 엔티티와의 관계를 가진다고 선언
+    @OneToOne(
+        () => MovieDetail, // 관계를 맺을 엔티티 타입
+        movieDetail => movieDetail.id, // 대상 엔티티의 참조 속성 // 생략 가능(?)
+        {
+            cascade: true // 케스케이드 : (한 셋트로 만듦)
+        }
+    ) 
     @JoinColumn()
     detail: MovieDetail; // 단순 값(string, number 등)을 저장할 때는 @Column() 데코레이터를 사용하는데,
                          // Relationship을 가지려고할 땐 해당 클래스타입으로 써준다. 
