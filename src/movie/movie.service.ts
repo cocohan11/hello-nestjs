@@ -69,25 +69,41 @@ export class MovieService {
 
 
   async updateMovie(id: number, updateMovieDto: UpdateMovieDto) {
+    // movie + movieDetail
     const movie = await this.movieRepository.findOne({
       where:{
         id,
-      }
+      }, 
+      relations: ['detail']
     })
-    
+    // 예외처리
     if(!movie) {
       throw new NotFoundException('존재하지않는 ID 값의 영화입니다!');
     }
 
+    // movie 테이블 업뎃
+    const { detail, ...movieRest } = updateMovieDto;
     await this.movieRepository.update(
       {id},
-      updateMovieDto
-    )
+      movieRest
+    );
+    // movieDetail 테이블 업뎃
+    if (detail) {
+      await this.movieDetailRepository.update(
+        {
+          id: movie.detail.id,
+        },
+        {
+          detail,
+        }
+      )
+    }
 
     const newMovie = await this.movieRepository.findOne({
       where:{
         id,
-      }
+      },
+      relations: ['detail']
     })
 
     return newMovie;

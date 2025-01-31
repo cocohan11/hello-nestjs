@@ -16,6 +16,10 @@ export class UpdateMovieDto {
     @IsNotEmpty()  
     @IsOptional()  
     genre?: string;
+
+    @IsNotEmpty()  
+    @IsOptional()  
+    detail?: string;
 }
 
 // 유효하지 않은 데이터
