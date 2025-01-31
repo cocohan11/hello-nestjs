@@ -5,6 +5,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as Joi from 'joi';
 import { Movie } from './movie/entity/movie.entity';
 import { MovieDetail } from './movie/entity/movie-detail.entity';
+import { DirectorModule } from './director/director.module';
+import { Director } from './director/entity/director.entity';
 
 
 // 모듈들이 한 데 모이는 중앙모듈 역할을 하게 됨
@@ -34,12 +36,14 @@ import { MovieDetail } from './movie/entity/movie-detail.entity';
         entities: [
           Movie,
           MovieDetail,
+          Director
         ],
         synchronize: true,
       }),
       inject: [ConfigService] // "IoC 컨테이너에서 ConfigService를 인젝션해줘야 합니다"
     }),
-    MovieModule
+    MovieModule,
+    DirectorModule
   ],
 })
 export class AppModule {}
