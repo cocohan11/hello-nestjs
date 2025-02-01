@@ -4,6 +4,7 @@ import { MovieController } from './movie.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Movie } from './entity/movie.entity';
 import { MovieDetail } from './entity/movie-detail.entity';
+import { Director } from 'src/director/entity/director.entity';
 
 @Module({
   imports:[
@@ -11,6 +12,7 @@ import { MovieDetail } from './entity/movie-detail.entity';
     TypeOrmModule.forFeature([ // 1. 창구직원 채용 (Repository 등록)
       Movie, // Movie 담당 창구직원 채용
       MovieDetail,
+      Director,
     ])
   ],
   controllers: [MovieController],
