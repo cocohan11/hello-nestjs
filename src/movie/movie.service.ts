@@ -3,7 +3,7 @@ import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { Movie } from './entity/movie.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Like, Repository } from 'typeorm';
+import { In, Like, Repository } from 'typeorm';
 import { MovieDetail } from './entity/movie-detail.entity';
 import { Director } from 'src/director/entity/director.entity';
 import { Genre } from 'src/genre/entities/genre.entity';
@@ -70,23 +70,23 @@ export class MovieService {
         id:createMovieDto.directorId
       }
     });
-    const genre = await this.genreRepository.findOne({
+    const genres = await this.genreRepository.find({ // 여러 개
       where:{
-        id:createMovieDto.genreId
+        id: In(createMovieDto.genreIds), // 리스트로 값을 넣으면, 리스트에 해당되는 모든 ids를 다 찾는다.
       }
     });
     // 예외처리
     if (!director) {
       throw new NotFoundException('존재하지 않는 ID의 감독입니다!');
     }
-    if (!genre) {
-      throw new NotFoundException('존재하지 않는 ID의 장르입니다!');
+    if (genres.length !== createMovieDto.genreIds.length) { // 전송한 장르갯수와 실제DB에서 찾아낸 장르갯수가 같아야 함
+      throw new NotFoundException(`존재하지 않는 ID의 장르입니다! 존재하는 ids -> ${genres.map(genre => genre.id).join(',')}`);
     }
     // 영화 생성
     const movie = await this.movieRepository.save({
       title: createMovieDto.title,
       // genre: createMovieDto.genre,
-      genre,
+      genres,
       detail: {
         detail: createMovieDto.detail,
       },

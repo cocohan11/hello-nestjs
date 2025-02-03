@@ -20,19 +20,6 @@ export class Movie extends BaseTable {
         unique: true
     })
     title: string;
-    
-    // @Column() 
-    // genre: string;
-    @ManyToMany(
-        () => Genre,
-        genre => genre.movies,
-        {
-            cascade: true, 
-        }
-    )
-    @JoinTable()
-    genres: Genre[];
-
 
     @OneToOne(
         () => MovieDetail, // 관계를 맺을 엔티티 타입
@@ -59,5 +46,18 @@ export class Movie extends BaseTable {
         }
     )
     director: Director;
+        
+    // @Column() 
+    // genre: string;
+    @ManyToMany(
+        () => Genre,
+        genre => genre.movies,
+        {
+            cascade: true, 
+        }
+    )
+    @JoinTable()
+    genres: Genre[];
+
 }
  

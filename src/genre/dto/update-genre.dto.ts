@@ -1,10 +1,11 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateGenreDto } from './create-genre.dto';
-import { IsOptional } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
 export class UpdateGenreDto extends PartialType(CreateGenreDto) {
 
     @IsOptional()
+    @IsString()
     name?: string;
 
 }
