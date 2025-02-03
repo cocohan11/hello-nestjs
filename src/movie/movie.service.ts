@@ -53,7 +53,7 @@ export class MovieService {
       where:{
         id,
       },
-      relations: ['detail', 'director']
+      relations: ['detail', 'director', 'genres']
     })
      
     if(!movie) {
@@ -98,66 +98,89 @@ export class MovieService {
 
 
   async update(id: number, updateMovieDto: UpdateMovieDto) {
-    // // movie + movieDetail
-    // const movie = await this.movieRepository.findOne({
-    //   where:{
-    //     id,
-    //   }, 
-    //   relations: ['detail']
-    // })
-    // // 예외처리
-    // if(!movie) {
-    //   throw new NotFoundException('존재하지않는 ID 값의 영화입니다!');
-    // }
-    // // 데이터 쪼갬
-    // const { detail, directorId, ...movieRest } = updateMovieDto;
-    // let newDirector;
-    // // directorId를 수정할 경우, 
-    // if (directorId) {
-    //   // 먼저 그 감독의 존재여부 확인
-    //   const director = await this.directorRepository.findOne({
-    //     where: {
-    //       id: directorId,
-    //     }
-    //   })
-    //   // 예외처리
-    //   if (!director) {
-    //     throw new NotFoundException('존재하지 않는 ID의 감독입니다!');
-    //   }
-    //   newDirector = director;
-    // }
-    // // movieUpdateFields는 업데이트할 영화 데이터를 담는 객체
-    // // 1. movieRest: UpdateMovieDto에서 detail과 directorId를 제외한 나머지 필드들
-    // // 2. 새로운 감독(newDirector)이 있다면 director 필드에 추가
-    // const movieUpdateFields = {
-    //   ...movieRest,
-    //   ...(newDirector && {director: newDirector})
-    // }
-    // //  Director 테이블 업뎃
-    // await this.movieRepository.update(
-    //   {id},
-    //   movieUpdateFields
-    // );
-    // // movieDetail 테이블 업뎃
-    // if (detail) {
-    //   await this.movieDetailRepository.update(
-    //     {
-    //       id: movie.detail.id, // movieDetail테이블의 id를 넣어야됨 주의
-    //     },
-    //     {
-    //       detail,
-    //     }
-    //   )
-    // }
-    // // 업뎃한 영화 조회 
-    // const newMovie = await this.movieRepository.findOne({
-    //   where:{
-    //     id,
-    //   },
-    //   relations: ['detail', 'director']
-    // })
+    // movie + movieDetail
+    const movie = await this.movieRepository.findOne({
+      where:{
+        id,
+      }, 
+      relations: ['detail']
+    })
+    // 예외처리
+    if(!movie) {
+      throw new NotFoundException('존재하지않는 ID 값의 영화입니다!');
+    }
+    // 데이터 쪼갬
+    const { detail, directorId, genreIds, ...movieRest } = updateMovieDto;
+    let newDirector;
+    // directorId를 수정할 경우, 
+    if (directorId) {
+      // 먼저 그 감독의 존재여부 확인
+      const director = await this.directorRepository.findOne({
+        where: {
+          id: directorId,
+        }
+      })
+      // 예외처리
+      if (!director) {
+        throw new NotFoundException('존재하지 않는 ID의 감독입니다!');
+      }
+      newDirector = director;
+    }
+    // DTO로 받은 장르ids 모두 찾기
+    let newGenres;
+    if (genreIds) {
+      const genres = await this.genreRepository.find({
+        where: {
+          id: In(genreIds), // 리스트 안의 값들을 다 찾는다. 
+        },
+      });
+      // 예외 처리
+      if (genres.length !== updateMovieDto.genreIds.length) { // 전송한 장르갯수와 실제DB에서 찾아낸 장르갯수가 같아야 함
+        throw new NotFoundException(`존재하지 않는 ID의 장르입니다! 존재하는 ids -> ${genres.map(genre => genre.id).join(',')}`);
+      }
+      // newGenres에 값 대입
+      newGenres = genres;
+    }
 
-    // return newMovie;
+    // movieUpdateFields는 업데이트할 영화 데이터를 담는 객체
+    // 1. movieRest: UpdateMovieDto에서 detail과 directorId를 제외한 나머지 필드들
+    // 2. 새로운 감독(newDirector)이 있다면 director 필드에 추가
+    const movieUpdateFields = {
+      ...movieRest,
+      ...(newDirector && {director: newDirector})
+    }
+    //  Director 테이블 업뎃
+    await this.movieRepository.update(
+      {id},
+      movieUpdateFields
+    );
+    // movieDetail 테이블 업뎃
+    if (detail) {
+      await this.movieDetailRepository.update(
+        {
+          id: movie.detail.id, // movieDetail테이블의 id를 넣어야됨 주의
+        },
+        {
+          detail,
+        }
+      )
+    }
+    // 업뎃한 영화 조회 
+    const newMovie = await this.movieRepository.findOne({
+      where:{
+        id,
+      },
+      relations: ['detail', 'director', 'genres']
+    })
+    // Movie-Genre 조인테이블 수정 
+    newMovie.genres = newGenres;
+    await this.movieRepository.save(newMovie);  // update대신 save를 써야 함
+    // 왜 장르를 저장안하지? 
+    // -> 아, 장르를 수정하는게 아니라 연결된 장르 id만 수정하는거니까, 조인테이블을 수정해야되는구나. 
+    // 조인테이블은 Movie Entity에 저장되어있기 때문에 MovieRepository를 불러와서 save하는 것 같다. 
+
+    return newMovie;  // 강사와 다르지만, 위에서 'genres'와 join했고 새로운 값으로 대체했기 때문에 밑에서 다시 findOne()쿼리요청해서 리턴안해도됨됨
+    // return this.movieRepository.preload(newMovie);
   }
 
 
