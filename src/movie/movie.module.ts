@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Movie } from './entity/movie.entity';
 import { MovieDetail } from './entity/movie-detail.entity';
 import { Director } from 'src/director/entity/director.entity';
+import { Genre } from 'src/genre/entities/genre.entity';
 
 @Module({
   imports:[
@@ -13,6 +14,7 @@ import { Director } from 'src/director/entity/director.entity';
       Movie, // Movie 담당 창구직원 채용
       MovieDetail,
       Director,
+      Genre,
     ])
   ],
   controllers: [MovieController],

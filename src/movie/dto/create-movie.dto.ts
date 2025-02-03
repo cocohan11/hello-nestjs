@@ -1,4 +1,4 @@
-import { IsNotEmpty, isNotEmpty } from "class-validator";
+import { IsNotEmpty } from "class-validator";
 
 export class CreateMovieDto {
 
@@ -6,7 +6,7 @@ export class CreateMovieDto {
      title: string;
 
      @IsNotEmpty()
-     genre: string;
+     genreId: number;
      
      @IsNotEmpty()
      detail: string;

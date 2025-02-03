@@ -7,6 +7,8 @@ import { Movie } from './movie/entity/movie.entity';
 import { MovieDetail } from './movie/entity/movie-detail.entity';
 import { DirectorModule } from './director/director.module';
 import { Director } from './director/entity/director.entity';
+import { GenreModule } from './genre/genre.module';
+import { Genre } from './genre/entities/genre.entity';
 
 
 // 모듈들이 한 데 모이는 중앙모듈 역할을 하게 됨
@@ -36,14 +38,16 @@ import { Director } from './director/entity/director.entity';
         entities: [
           Movie,
           MovieDetail,
-          Director
+          Director,
+          Genre
         ],
         synchronize: true,
       }),
       inject: [ConfigService] // "IoC 컨테이너에서 ConfigService를 인젝션해줘야 합니다"
     }),
     MovieModule,
-    DirectorModule
+    DirectorModule,
+    GenreModule
   ],
 })
 export class AppModule {}
