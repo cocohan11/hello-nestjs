@@ -200,6 +200,7 @@ export class MovieService {
       }
       // 데이터 쪼갬
       const { detail, directorId, genreIds, ...movieRest } = updateMovieDto;
+      // console.log(typeof movieRest.title); // boolean
       let newDirector;
       // directorId를 수정할 경우, 
       if (directorId) {
@@ -238,6 +239,7 @@ export class MovieService {
         ...movieRest,
         ...(newDirector && {director: newDirector})
       }
+
       //  Director 테이블 업뎃
       await qr.manager.createQueryBuilder()
       .update(Movie)

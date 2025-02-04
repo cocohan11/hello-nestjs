@@ -1,8 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseInterceptors, ClassSerializerInterceptor } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseInterceptors, ClassSerializerInterceptor, ParseIntPipe, BadRequestException, NotFoundException, ParseBoolPipe, ParseArrayPipe, ParseEnumPipe, DefaultValuePipe } from '@nestjs/common';
 import { MovieService } from './movie.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
+import { number } from 'joi';
 
+
+enum Test {
+  kim,
+  park
+}
 
 @Controller('movie')
 @UseInterceptors(ClassSerializerInterceptor) // -> class transformer를 movieController에 적용하겠다. 
@@ -20,8 +26,11 @@ export class MovieController {
 
   @Get(':id')
   getMovie(
-    @Param('id') id: string
+    @Param('id', ParseIntPipe) id: number, // ParseIntPipe를 넣어주면 id를 string으로 하지않아도됨. 왜냐면 변환해주고 검증해주니까. 
+    // @Query('test', new DefaultValuePipe(10)) test: number,
   ) {
+    console.log(test);
+    throw new NotFoundException('에러!')
     return this.movieService.findOne(+id);
   }
 
@@ -38,7 +47,7 @@ export class MovieController {
 
   @Patch(':id')
   patchMovie(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() body: UpdateMovieDto
   ) {
     return this.movieService.update(
@@ -50,7 +59,7 @@ export class MovieController {
 
   @Delete(':id')
   deleteMovie(
-    @Param('id') id: string
+    @Param('id', ParseIntPipe) id: number
   ) {
     return this.movieService.remove(+id); 
   }

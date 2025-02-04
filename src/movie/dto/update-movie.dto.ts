@@ -9,6 +9,7 @@ enum MovieGenre {
 
 export class UpdateMovieDto {
 
+    @IsString()
     @IsOptional()  // 런타임에 동작
     title?: string;  // 컴파일 타임에만 동작 // 개발 시에만 도움이 되고, 런타임에는 영향 없음
 
@@ -16,9 +17,11 @@ export class UpdateMovieDto {
     @IsNumber({}, { each: true })
     genreIds?: number[];
 
+    @IsString()
     @IsOptional()  
     detail?: string;
 
+    @IsNumber()
     @IsOptional()  
     directorId?: number;
 }
