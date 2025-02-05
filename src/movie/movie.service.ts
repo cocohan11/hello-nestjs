@@ -35,7 +35,7 @@ export class MovieService {
     .leftJoinAndSelect('movie.genres', 'genres');
     // 제목이 있다면 다음 조건을 쿼리빌더에 덧붙이기
     if (title) {
-      qb.where('movie.title LIKE: title', {title: `%${title}%`})
+      qb.where('movie.title LIKE :title', {title: `%${title}%`})
     }
     return await qb.getManyAndCount();
 

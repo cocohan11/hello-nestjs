@@ -3,12 +3,8 @@ import { MovieService } from './movie.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { number } from 'joi';
+import { MovieTitleValidationPipe } from './pipe/movie-title-validation.pipe';
 
-
-enum Test {
-  kim,
-  park
-}
 
 @Controller('movie')
 @UseInterceptors(ClassSerializerInterceptor) // -> class transformer를 movieController에 적용하겠다. 
@@ -18,7 +14,7 @@ export class MovieController {
  
   @Get()
   getMovies(
-    @Query('title') title?: string
+    @Query('title', MovieTitleValidationPipe) title?: string
   ) {
     return this.movieService.findAll(title);
   }
