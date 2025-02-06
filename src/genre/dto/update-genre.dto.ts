@@ -4,8 +4,8 @@ import { IsOptional, IsString } from 'class-validator';
 
 export class UpdateGenreDto extends PartialType(CreateGenreDto) {
 
-    @IsOptional()
-    @IsString()
-    name?: string;
+    // @IsOptional()
+    // @IsString()
+    // name?: string;
 
 }
