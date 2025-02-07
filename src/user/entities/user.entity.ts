@@ -18,7 +18,7 @@ export class User extends BaseEntity {
     email: string;
 
     @Column()
-    @Exclude({ toPlainOnly: true }) // 응답할 때때
+    @Exclude({ toPlainOnly: true }) // 응답할 때 
     password: string;
 
     @Column({

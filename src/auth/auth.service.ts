@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
 import { number } from 'joi';
+import { JwtService } from '@nestjs/jwt';
 
 
 @Injectable()
@@ -14,6 +15,7 @@ export class AuthService {
         @InjectRepository(User)
         private readonly userRepository: Repository<User>,
         private readonly configservice: ConfigService,
+        private readonly jwtService: JwtService,
     ){}
     
     parseBasicToken(rawToken: string) {
@@ -70,6 +72,47 @@ export class AuthService {
                 email,
             }
         })
+    }
+
+
+    async logoin(rawToken: string) {
+        const { email, password } = this.parseBasicToken(rawToken);
+        const user = await this.userRepository.findOne({
+            where: {
+                email,
+            },
+        });
+
+        if (!user) {
+            throw new BadRequestException('잘못된 로그인 정보입니다!');
+        }
+
+        const passOk = await bcrypt.compare(password, user.password); // 비교
+        if (!passOk) {
+            throw new BadRequestException('잘못된 로그인 정보입니다!');
+        }
+
+        const refreshTokenSecret = this.configservice.get<string>('REFRESH_TOKEN_SECRET');
+        const accessTokenSecret = this.configservice.get<string>('ACCESS_TOKEN_SECRET');
+
+        return {
+            refreshToken: await this.jwtService.signAsync({
+                sub: user.id,
+                role: user.role,
+                type: 'refresh',
+            }, {
+                secret: refreshTokenSecret,
+                expiresIn: '24h'
+            }),
+            accessToken: await this.jwtService.signAsync({
+                sub: user.id,
+                role: user.role,
+                type: 'access',
+            }, {
+                secret: accessTokenSecret,
+                expiresIn: 300 // 5분분
+            }),
+        }
     }
 
 }
