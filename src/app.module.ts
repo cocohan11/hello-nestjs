@@ -27,6 +27,7 @@ import { User } from './user/entities/user.entity';
         DB_USERNAME: Joi.string().required(),
         DB_PASSWORD: Joi.string().required(),
         DB_DATABASE: Joi.string().required(),  
+        HASH_ROUNDS: Joi.number().required(),  
       })
     }),
     // 왜 비동기로 실행하느냐? -> 
