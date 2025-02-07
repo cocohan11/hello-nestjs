@@ -9,6 +9,9 @@ import { DirectorModule } from './director/director.module';
 import { Director } from './director/entity/director.entity';
 import { GenreModule } from './genre/genre.module';
 import { Genre } from './genre/entities/genre.entity';
+import { AuthModule } from './auth/auth.module';
+import { UserModule } from './user/user.module';
+import { User } from './user/entities/user.entity';
 
 
 // 모듈들이 한 데 모이는 중앙모듈 역할을 하게 됨
@@ -39,7 +42,8 @@ import { Genre } from './genre/entities/genre.entity';
           Movie,
           MovieDetail,
           Director,
-          Genre
+          Genre,
+          User,
         ],
         synchronize: true,
       }),
@@ -47,7 +51,9 @@ import { Genre } from './genre/entities/genre.entity';
     }),
     MovieModule,
     DirectorModule,
-    GenreModule
+    GenreModule,
+    AuthModule,
+    UserModule
   ],
 })
 export class AppModule {}
