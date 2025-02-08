@@ -1,5 +1,6 @@
-import { Controller, Post, Headers } from '@nestjs/common';
+import { Controller, Post, Headers, Request, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('auth')
 export class AuthController {
@@ -14,5 +15,11 @@ export class AuthController {
   @Post('login')
   loginUser(@Headers('authorization') token: string){
     return this.authService.logoin(token);
+  }
+
+  @UseGuards(AuthGuard('local'))
+  @Post('login/passport')
+  loginUserPassport(@Request() req) {
+    return req.user;
   }
 }

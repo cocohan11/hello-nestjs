@@ -4,7 +4,6 @@ import { User } from 'src/user/entities/user.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
-import { number } from 'joi';
 import { JwtService } from '@nestjs/jwt';
 
 
@@ -74,9 +73,7 @@ export class AuthService {
         })
     }
 
-
-    async logoin(rawToken: string) {
-        const { email, password } = this.parseBasicToken(rawToken);
+    async authenticate(email: string, password: string) {
         const user = await this.userRepository.findOne({
             where: {
                 email,
@@ -91,6 +88,13 @@ export class AuthService {
         if (!passOk) {
             throw new BadRequestException('잘못된 로그인 정보입니다!');
         }
+
+        return user;
+    }
+
+    async logoin(rawToken: string) {
+        const { email, password } = this.parseBasicToken(rawToken);
+        const user = await this.authenticate(email, password);
 
         const refreshTokenSecret = this.configservice.get<string>('REFRESH_TOKEN_SECRET');
         const accessTokenSecret = this.configservice.get<string>('ACCESS_TOKEN_SECRET');
