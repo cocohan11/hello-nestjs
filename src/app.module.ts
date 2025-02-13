@@ -12,6 +12,7 @@ import { Genre } from './genre/entities/genre.entity';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { User } from './user/entities/user.entity';
+import { envVariablesKeys } from './common/const/env.const';
 
 
 // 모듈들이 한 데 모이는 중앙모듈 역할을 하게 됨
@@ -35,12 +36,12 @@ import { User } from './user/entities/user.entity';
     // 왜 비동기로 실행하느냐? -> 
     TypeOrmModule.forRootAsync({
       useFactory:(configService: ConfigService) => ({ // ConfigService를 IoC 컨테이너로부터 주입받아 사용
-        type: configService.get<string>('DB_TYPE') as "postgres",
-        host: configService.get<string>('DB_HOST'),
-        port: configService.get<number>('DB_PORT'),
-        username: configService.get<string>('DB_USERNAME'),
-        password: configService.get<string>('DB_PASSWORD'),
-        database: configService.get<string>('DB_DATABASE'),
+        type: configService.get<string>(envVariablesKeys.DB_TYPE) as "postgres",
+        host: configService.get<string>(envVariablesKeys.DB_HOST),
+        port: configService.get<number>(envVariablesKeys.DB_PORT),
+        username: configService.get<string>(envVariablesKeys.DB_USERNAME),
+        password: configService.get<string>(envVariablesKeys.DB_PASSWORD),
+        database: configService.get<string>(envVariablesKeys.DB_DATABASE),
         entities: [
           Movie,
           MovieDetail,
