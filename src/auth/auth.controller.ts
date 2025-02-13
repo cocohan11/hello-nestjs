@@ -15,8 +15,15 @@ export class AuthController {
   }
 
   @Post('login')
-  loginUser(@Headers('authorization') token: string){
+  loginUser(@Headers('authorization') token: string) {
     return this.authService.logoin(token);
+  }
+
+  @Post('token/access')
+  rotateAccessToken(@Headers('authorization') token: string) {
+    return {
+      
+    }
   }
 
   @UseGuards(LocalAuthGuard)
