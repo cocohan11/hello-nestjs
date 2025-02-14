@@ -51,7 +51,7 @@ export class AuthService {
     }
 
 
-    async parseBearerToken(rawToken: string) {
+    async parseBearerToken(rawToken: string, isRefreshToken: boolean) {
         const basicSplit = rawToken.split(' ');
 
         if (basicSplit.length !== 2) {
@@ -66,7 +66,9 @@ export class AuthService {
 
         try {
             const payload = await this.jwtService.verifyAsync(token, {
-                secret: this.configservice.get<string>(envVariablesKeys.REFRESH_TOKEN_SECRET),
+                secret: this.configservice.get<string>(
+                    isRefreshToken ? envVariablesKeys.REFRESH_TOKEN_SECRET : envVariablesKeys.ACCESS_TOKEN_SECRET
+                ),
             })
             if (payload.type !== 'refresh') {
                 throw new BadRequestException('RefreshToken을 보내주세요!');
