@@ -38,10 +38,13 @@ export class BearerTokenMiddleware implements NestMiddleware {
             })
 
             // return payload;
-            req.user = payload; // ?
+            req.user = payload; 
             next();
         } catch (e) {
-            throw new UnauthorizedException(e);
+            next(); 
+            // 어차피 토큰에 문제있으면 미들웨어 다음 Guard에서 return false로 걸러지니까, 
+            // 토큰 잘 못 입력되도 통과될 수 있게 미들웨어에서 next()로 넘기기. 
+            // 그러면 @Public이 달린 라우터는 토큰상관없이 다 통과됨 
         }
     }
 

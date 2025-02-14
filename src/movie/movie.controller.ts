@@ -5,6 +5,7 @@ import { UpdateMovieDto } from './dto/update-movie.dto';
 import { number } from 'joi';
 import { MovieTitleValidationPipe } from './pipe/movie-title-validation.pipe';
 import { AuthGuard } from 'src/auth/guard/auth.guard';
+import { Public } from 'src/auth/decorator/public.decorator';
 
 
 @Controller('movie')
@@ -13,6 +14,7 @@ export class MovieController {
   constructor(private readonly movieService: MovieService) {}
 
  
+  @Public()
   @Get()
   getMovies(
     @Query('title', MovieTitleValidationPipe) title?: string,
