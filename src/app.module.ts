@@ -14,6 +14,8 @@ import { UserModule } from './user/user.module';
 import { User } from './user/entities/user.entity';
 import { envVariablesKeys } from './common/const/env.const';
 import { BearerTokenMiddleware } from './auth/middleware/bearer-token.middleware';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from './auth/guard/auth.guard';
 
 
 // 모듈들이 한 데 모이는 중앙모듈 역할을 하게 됨
@@ -60,6 +62,12 @@ import { BearerTokenMiddleware } from './auth/middleware/bearer-token.middleware
     AuthModule,
     UserModule
   ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    }
+  ]
 })
 
 export class AppModule implements NestModule {

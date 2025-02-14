@@ -1,9 +1,10 @@
-import { Request, Controller, Get, Post, Body, Patch, Param, Delete, Query, UseInterceptors, ClassSerializerInterceptor, ParseIntPipe, BadRequestException, NotFoundException, ParseBoolPipe, ParseArrayPipe, ParseEnumPipe, DefaultValuePipe } from '@nestjs/common';
+import { Request, Controller, Get, Post, Body, Patch, Param, Delete, Query, UseInterceptors, ClassSerializerInterceptor, ParseIntPipe, BadRequestException, NotFoundException, ParseBoolPipe, ParseArrayPipe, ParseEnumPipe, DefaultValuePipe, UseGuards } from '@nestjs/common';
 import { MovieService } from './movie.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { number } from 'joi';
 import { MovieTitleValidationPipe } from './pipe/movie-title-validation.pipe';
+import { AuthGuard } from 'src/auth/guard/auth.guard';
 
 
 @Controller('movie')
@@ -14,10 +15,8 @@ export class MovieController {
  
   @Get()
   getMovies(
-    @Request() req: any,
     @Query('title', MovieTitleValidationPipe) title?: string,
   ) {
-    console.log(req.user)
     return this.movieService.findAll(title);
   }
 
@@ -34,6 +33,7 @@ export class MovieController {
 
 
   @Post()
+  // @UseGuards(AuthGuard) // nestjs자체 AuthGuard도 존재함. 유의 
   postMovie(
     @Body() body: CreateMovieDto
   ) {
@@ -58,7 +58,7 @@ export class MovieController {
   @Delete(':id')
   deleteMovie(
     @Param('id', ParseIntPipe) id: number
-  ) {
+  ) {   
     return this.movieService.remove(+id); 
   }
 }

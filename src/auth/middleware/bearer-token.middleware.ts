@@ -18,11 +18,14 @@ export class BearerTokenMiddleware implements NestMiddleware {
             next(); // -> 미들웨어 끝내고 다음으로 가라
             return;
         }
-
         
         try {
             const token = this.validateBearerToken(authHeader);
             const decodedPayload = this.jwtService.decode(token);
+
+            if (!decodedPayload) { // 개인적으로 추가함
+                throw new UnauthorizedException('토큰 디코드에 실패했습니다다!');
+            }
 
             if (decodedPayload.type !== 'refresh' && decodedPayload.type !== 'access') {
                 throw new UnauthorizedException('토큰 타입이 잘못됐습니다!');
