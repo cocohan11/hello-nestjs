@@ -3,17 +3,20 @@ import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { LocalAuthGuard } from './strategy/local.strategy';
 import { JwtAuthGuard } from './strategy/jwt.strategy';
+import { Public } from './decorator/public.decorator';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @Public('tttaa')
   @Post('register')
   // authorization: Basic $token
   async registerUser(@Headers('authorization') token: string) { // -> authorization라는 키값의 헤더를 받을거다. 
     return await this.authService.register(token);
   }
 
+  @Public()
   @Post('login')
   loginUser(@Headers('authorization') token: string) {
     return this.authService.logoin(token);
