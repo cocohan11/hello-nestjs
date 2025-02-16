@@ -3,9 +3,9 @@ import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 
 export enum Role {
-    admin,
-    paidUser,
-    user,
+    admin, // 0
+    paidUser, // 1
+    user, // 2
 }
 
 @Entity()

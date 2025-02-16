@@ -6,6 +6,8 @@ import { number } from 'joi';
 import { MovieTitleValidationPipe } from './pipe/movie-title-validation.pipe';
 import { AuthGuard } from 'src/auth/guard/auth.guard';
 import { Public } from 'src/auth/decorator/public.decorator';
+import { RBAC } from 'src/auth/decorator/rbac.decorator';
+import { Role } from 'src/user/entities/user.entity';
 
 
 @Controller('movie')
@@ -23,6 +25,7 @@ export class MovieController {
   }
 
 
+  @Public()
   @Get(':id')
   getMovie(
     @Param('id', ParseIntPipe) id: number, // ParseIntPipe를 넣어주면 id를 string으로 하지않아도됨. 왜냐면 변환해주고 검증해주니까. 
@@ -35,7 +38,7 @@ export class MovieController {
 
 
   @Post()
-  // @UseGuards(AuthGuard) // nestjs자체 AuthGuard도 존재함. 유의 
+  @RBAC(Role.paidUser)
   postMovie(
     @Body() body: CreateMovieDto
   ) {
@@ -46,6 +49,7 @@ export class MovieController {
 
 
   @Patch(':id')
+  @RBAC(Role.admin)
   patchMovie(
     @Param('id', ParseIntPipe) id: number,
     @Body() body: UpdateMovieDto
@@ -58,6 +62,7 @@ export class MovieController {
 
 
   @Delete(':id')
+  @RBAC(Role.admin)
   deleteMovie(
     @Param('id', ParseIntPipe) id: number
   ) {   
