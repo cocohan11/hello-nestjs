@@ -6,6 +6,7 @@ import { Movie } from './entity/movie.entity';
 import { MovieDetail } from './entity/movie-detail.entity';
 import { Director } from 'src/director/entity/director.entity';
 import { Genre } from 'src/genre/entities/genre.entity';
+import { CommonMoudle } from 'src/common/common.module';
 
 @Module({
   imports:[
@@ -15,7 +16,8 @@ import { Genre } from 'src/genre/entities/genre.entity';
       MovieDetail,
       Director,
       Genre,
-    ])
+    ]),
+    CommonMoudle,
   ],
   controllers: [MovieController],
   providers: [MovieService], // MovieService라는 클래스의 인스턴스를 주입하겠다-고 프로바이더에 설정함

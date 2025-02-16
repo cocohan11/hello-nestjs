@@ -8,6 +8,7 @@ import { AuthGuard } from 'src/auth/guard/auth.guard';
 import { Public } from 'src/auth/decorator/public.decorator';
 import { RBAC } from 'src/auth/decorator/rbac.decorator';
 import { Role } from 'src/user/entities/user.entity';
+import { GetMoviesDto } from './dto/get-movies.dto';
 
 
 @Controller('movie')
@@ -16,17 +17,17 @@ export class MovieController {
   constructor(private readonly movieService: MovieService) {}
 
  
-  @Public()
   @Get()
+  @Public()
   getMovies(
-    @Query('title', MovieTitleValidationPipe) title?: string,
+    @Query() dto: GetMoviesDto,
   ) {
-    return this.movieService.findAll(title);
+    return this.movieService.findAll(dto);
   }
 
 
-  @Public()
   @Get(':id')
+  @Public()
   getMovie(
     @Param('id', ParseIntPipe) id: number, // ParseIntPipe를 넣어주면 id를 string으로 하지않아도됨. 왜냐면 변환해주고 검증해주니까. 
     // @Query('test', new DefaultValuePipe(10)) test: number,
