@@ -21,6 +21,11 @@ export class Movie extends BaseTable {
     })
     title: string;
 
+    @Column({
+        default: 0
+    })
+    likeCount: number;
+
     @OneToOne(
         () => MovieDetail, // 관계를 맺을 엔티티 타입
         movieDetail => movieDetail.id, // 대상 엔티티의 참조 속성 // 생략 가능(?)

@@ -1,14 +1,20 @@
-import { IsIn, IsInt, IsOptional } from "class-validator";
+import { IsArray, IsIn, IsInt, IsOptional, IsString } from "class-validator";
 
 export class CursorPaginationDto {
 
     @IsInt()
     @IsOptional()
-    id?: number;
+    // id_52, likeCount_20
+    cursor?: string; // id
 
-    @IsIn(['ASC', 'DESC'])
+    @IsArray()
+    @IsString({
+        each: true,
+    })
     @IsOptional()
-    order: 'ASC' | 'DESC' = 'DESC' // 기본값이 디센딩이다. 
+    // id_ASC id_DESC
+    // [id_DESC, likeCount_DESC]
+    order: string[] = [];
 
     @IsInt()
     @IsOptional()

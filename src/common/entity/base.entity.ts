@@ -5,7 +5,7 @@ import { CreateDateColumn, UpdateDateColumn, VersionColumn } from "typeorm";
 export class BaseTable {
     @CreateDateColumn()
     @Exclude()
-    reatedAt: Date;
+    createdAt: Date;
 
     @UpdateDateColumn()
     @Exclude()
