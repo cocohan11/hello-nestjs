@@ -9,5 +9,5 @@ export class PagePaginationDto {
 
     @IsInt()
     @IsOptional()
-    take: number = 5; // 갯수
+    take: number = 5; // 디폴트 갯수
 }
