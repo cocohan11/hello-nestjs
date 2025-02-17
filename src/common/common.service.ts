@@ -43,6 +43,7 @@ export class CommonService {
 
             // 쿼리빌더 -> (movie.likeCount, movie.id)< (:likeCount, :id)  
             qb.where(`(${whereConditions}) ${comparisonOperator} (${whereParams})`, values); 
+            // qb.andWhere
         }
 
         // 첫 페이지 요청
